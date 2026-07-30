@@ -66,31 +66,31 @@ The system provides both single customer prediction and batch portfolio analysis
 
 ## Hero Section
 
-![Hero](screenshots/hero.png)
+![Hero](screenshot/hero.png)
 
 ---
 
 ## Analytics Dashboard
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshot/dashboard.png)
 
 ---
 
 ## Risk Distribution
 
-![Analytics](screenshots/analytics.png)
+![Analytics](screenshot/analytics.png)
 
 ---
 
 ## Batch Prediction
 
-![Batch](screenshots/batch-results.png)
+![Batch](screenshot/batch-results.png)
 
 ---
 
 ## Portfolio Summary
 
-![Portfolio](screenshots/portfolio.png)
+![Portfolio](screenshot/portfolio.png)
 
 ---
 
