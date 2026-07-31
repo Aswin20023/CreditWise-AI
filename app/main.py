@@ -14,6 +14,7 @@ from app.api.explain import router as explain_router
 from app.api.dashboard import router as dashboard_router
 from app.api.batch_predict import router as batch_router
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -30,7 +31,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-
 # -------------------------------------------------
 # CORS Configuration
 # -------------------------------------------------
@@ -39,12 +39,12 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "https://credit-wise-ai-six.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # -------------------------------------------------
 # Root Endpoint
