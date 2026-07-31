@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "https://creditwise-ai-4i4b.onrender.com",
   timeout: 10000,
 });
 
