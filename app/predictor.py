@@ -75,8 +75,8 @@ def predict_customer(input_data: dict):
 
     return {
         "prediction": int(prediction),
-        "probability_default": float(probability[1]),
-        "probability_no_default": float(probability[0]),
+        "probability_default": round(float(probability[1]) * 100, 2),
+        "probability_no_default": round(float(probability[0]) * 100, 2), 
         "summary": summary,
         "top_features": top_features,
     }
