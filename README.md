@@ -1,87 +1,75 @@
-# CreditWise AI
+<h1 align="center">CreditWise AI</h1>
+
+<p align="center">
+<b>AI-Powered Credit Risk Intelligence Platform</b>
+</p>
+
+<p align="center">
+Predict customer credit default risk using Machine Learning, explain predictions with SHAP, and analyze entire customer portfolios through an interactive analytics dashboard.
+</p>
 
 <p align="center">
 
-# AI-Powered Credit Risk Intelligence Platform
-
-Predict customer credit default risk using Machine Learning, explain predictions with SHAP, and analyze entire customer portfolios through an interactive analytics dashboard.
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688)
+![React](https://img.shields.io/badge/React-Frontend-61DAFB)
+![Machine Learning](https://img.shields.io/badge/ML-Random%20Forest-success)
+![License](https://img.shields.io/badge/License-Portfolio-orange)
 
 </p>
 
 ---
 
-## Overview
+# Overview
 
-CreditWise AI is an end-to-end machine learning application that predicts the probability of customer credit default using a Random Forest classifier.
+CreditWise AI is an end-to-end Machine Learning application designed to predict customer credit default risk using a Random Forest Classifier.
 
-The platform combines predictive analytics, explainable AI, portfolio-level risk assessment, and interactive visualizations to help financial institutions evaluate customer creditworthiness.
+The platform combines Machine Learning, Explainable AI (SHAP), interactive analytics, and portfolio-level risk assessment to provide a complete credit risk intelligence solution.
 
-The application consists of a React frontend, FastAPI backend, and Scikit-learn machine learning pipeline.
+Built with a **FastAPI backend** and **React frontend**, CreditWise AI supports both individual customer predictions and large-scale batch portfolio analysis through an intuitive web interface.
 
 ---
 
 # Key Features
 
-### Credit Risk Prediction
+## Individual Credit Risk Prediction
 
-- Individual customer prediction
-- Default probability estimation
-- Risk categorization (Low / Medium / High)
+- Predict customer default probability
+- Low / Medium / High risk classification
+- AI-powered prediction summary
+- Explainable AI using SHAP
 
 ---
 
-### Batch Portfolio Analysis
+## Batch Portfolio Analysis
 
-- Upload CSV files
+- Upload CSV portfolios
 - Analyze thousands of customers
-- Portfolio-level risk distribution
-- Export results
+- Portfolio-level analytics
+- Risk segmentation
+- Search, filtering and pagination
+- CSV export
+- PDF report generation
 
 ---
 
-### Explainable AI
+## Interactive Dashboard
+
+- Portfolio overview
+- Risk distribution visualization
+- Average default probability
+- Highest & lowest risk customers
+- Predicted default statistics
+- Responsive analytics interface
+
+---
+
+## Explainable AI
 
 - SHAP feature importance
-- AI-generated prediction explanation
-- Feature contribution visualization
-
----
-
-### Analytics Dashboard
-
-- Risk distribution
-- Average probability
-- Highest risk customer
-- Lowest risk customer
-- Predicted defaults
-- Customer portfolio overview
-
----
-
-### Reporting
-
-- Export prediction results to CSV
-- Export professional PDF reports
-
----
-
-# System Architecture
-
-```
-                React + Vite
-                     │
-          REST API (Axios)
-                     │
-          FastAPI Backend
-                     │
-      Feature Engineering
-                     │
-     Random Forest Classifier
-                     │
-          SHAP Explainability
-                     │
-      Prediction + Analytics
-```
+- Feature contribution analysis
+- Human-readable prediction explanation
+- Model transparency
 
 ---
 
@@ -103,9 +91,9 @@ The application consists of a React frontend, FastAPI backend, and Scikit-learn 
 
 - FastAPI
 - Python
+- SQLite
 - Pandas
 - NumPy
-- SQLite
 
 ---
 
@@ -120,46 +108,78 @@ The application consists of a React frontend, FastAPI backend, and Scikit-learn 
 
 # Machine Learning Pipeline
 
-```
-Customer Data
-      │
-      ▼
+```text
+Customer Information
+        │
+        ▼
 Feature Engineering
-      │
-      ▼
-Random Forest Model
-      │
-      ▼
+        │
+        ▼
+Random Forest Classifier
+        │
+        ▼
 Prediction Probability
-      │
-      ├────────► Risk Classification
-      │
-      └────────► SHAP Explainability
+        │
+        ├────────────► Risk Classification
+        │
+        └────────────► SHAP Explainability
+```
+
+---
+
+# System Architecture
+
+```text
+                 React + Vite
+                       │
+                  Axios REST API
+                       │
+                 FastAPI Backend
+                       │
+          Feature Engineering Layer
+                       │
+        Random Forest ML Classifier
+                       │
+          SHAP Explainability Engine
+                       │
+        Prediction & Analytics Output
 ```
 
 ---
 
 # Risk Classification
 
-| Probability | Risk |
-|------------:|------|
-| < 40% | Low |
-| 40% – 69.99% | Medium |
-| ≥ 70% | High |
+| Default Probability | Risk Level |
+|--------------------:|------------|
+| < 40% | 🟢 Low Risk |
+| 40% – 69.99% | 🟡 Medium Risk |
+| ≥ 70% | 🔴 High Risk |
+
+---
+
+# Dataset
+
+The model is trained using the **UCI Default of Credit Card Clients Dataset**.
+
+### Features
+
+- Customer demographics
+- Credit limit
+- Repayment history
+- Bill statements
+- Previous payment amounts
+
+### Target
+
+Predict whether a customer is likely to default on the next month's credit payment.
 
 ---
 
 # Application Preview
 
-## Batch Analytics Landing Page
-
-![Landing Page](screenshots/landing-page.png)
-
----
-
 ## Batch Analytics Dashboard
 
-![Analytics Dashboard](screenshots/batch-analytics.png)
+![Batch Analytics](screenshots/batch-analytics.png)
 
 ---
 
@@ -167,18 +187,29 @@ Prediction Probability
 
 ![Batch Results](screenshots/batch-results.png)
 
-# Folder Structure
+---
+
+## Portfolio Overview
+
+![Portfolio Overview](screenshots/portfolio-overview.png)
+
+---
+
+# Project Structure
 
 ```text
 CreditWise-AI
 │
-├── app/                  # FastAPI backend
-├── frontend-react/       # React frontend
-├── models/               # Trained ML models
-├── notebooks/            # Model development
-├── src/                  # ML pipeline
-├── data/                 # Datasets
-├── reports/              # Generated reports
+├── app/                    # FastAPI backend
+├── frontend-react/         # React frontend
+├── data/                   # Dataset
+├── models/                 # Trained ML model
+├── notebooks/              # Model development
+├── reports/                # Generated reports
+├── screenshots/            # README screenshots
+├── src/                    # ML pipeline
+├── tests/                  # Testing
+├── requirements.txt
 └── README.md
 ```
 
@@ -198,19 +229,25 @@ cd CreditWise-AI
 
 ## Backend
 
+Install dependencies
+
 ```bash
 pip install -r requirements.txt
+```
 
+Run FastAPI
+
+```bash
 uvicorn app.main:app --reload
 ```
 
-Backend URL
+Backend
 
 ```
 http://localhost:8000
 ```
 
-Swagger
+Swagger API
 
 ```
 http://localhost:8000/docs
@@ -228,7 +265,7 @@ npm install
 npm run dev
 ```
 
-Frontend URL
+Frontend
 
 ```
 http://localhost:5173
@@ -240,40 +277,41 @@ http://localhost:5173
 
 | Method | Endpoint | Description |
 |---------|----------|-------------|
-| POST | `/predict` | Single customer prediction |
+| POST | `/predict` | Predict single customer credit risk |
 | POST | `/batch/predict` | Batch CSV prediction |
-| POST | `/explain` | SHAP explainability |
+| POST | `/explain` | Generate SHAP explanation |
 | GET | `/dashboard` | Dashboard analytics |
 | GET | `/history` | Prediction history |
-| GET | `/health` | API health |
+| GET | `/health` | Health check |
 
 ---
 
 # Project Highlights
 
-- End-to-end Machine Learning system
+- End-to-end Machine Learning solution
 - Explainable AI using SHAP
-- Interactive analytics dashboard
-- Portfolio-level risk assessment
-- Batch prediction using CSV
+- Portfolio-level credit risk analytics
+- Interactive React dashboard
+- FastAPI REST API
+- CSV portfolio analysis
 - Professional PDF reporting
-- RESTful FastAPI backend
-- Modern React frontend
-- Responsive UI
-- Production-ready architecture
+- Responsive user interface
+- Clean project architecture
+- Production-ready code structure
 
 ---
 
 # Future Improvements
 
 - User authentication
-- PostgreSQL support
-- Docker deployment
+- PostgreSQL database
+- Docker containerization
 - CI/CD pipeline
-- Automated model retraining
-- Cloud storage integration
+- Cloud deployment
 - Model monitoring
+- Automated retraining
 - Multi-model comparison
+- Role-based access control
 
 ---
 
@@ -281,12 +319,14 @@ http://localhost:5173
 
 ## Aswin A Manchakkal
 
-GitHub
-
+GitHub:
 https://github.com/Aswin20023
+
+Project Repository:
+https://github.com/Aswin20023/CreditWise-AI
 
 ---
 
 # License
 
-This project is intended for educational, research, and portfolio purposes.
+This project was developed for educational, research, and portfolio purposes.
