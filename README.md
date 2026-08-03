@@ -149,43 +149,23 @@ Prediction Probability
 
 ---
 
-# Screenshots
+# Application Preview
 
-## Landing Page
+## Batch Analytics Landing Page
 
-![Hero](screenshots/hero.png)
-
----
-
-## Customer Prediction
-
-![Prediction](screenshots/prediction.png)
+![Landing Page](screenshots/landing-page.png)
 
 ---
 
-## Explainable AI
+## Batch Analytics Dashboard
 
-![Explainability](screenshots/explainability.png)
-
----
-
-## Batch Prediction
-
-![Batch](screenshots/batch-results.png)
+![Analytics Dashboard](screenshots/batch-analytics.png)
 
 ---
 
-## Analytics Dashboard
+## Batch Prediction Results
 
-![Dashboard](screenshots/dashboard.png)
-
----
-
-## Portfolio Analytics
-
-![Portfolio](screenshots/portfolio.png)
-
----
+![Batch Results](screenshots/batch-results.png)
 
 # Folder Structure
 
