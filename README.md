@@ -189,12 +189,6 @@ Predict whether a customer is likely to default on the next month's credit payme
 
 ---
 
-## Portfolio Overview
-
-![Portfolio Overview](screenshots/portfolio-overview.png)
-
----
-
 # Project Structure
 
 ```text
