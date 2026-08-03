@@ -1,5 +1,10 @@
 import sqlite3
 
+from app.risk_config import (
+    HIGH_RISK_THRESHOLD,
+    MEDIUM_RISK_THRESHOLD,
+)
+
 DATABASE = "creditwise.db"
 
 
@@ -83,6 +88,7 @@ def get_predictions():
 # -------------------------------------------------
 # Delete a single prediction
 # -------------------------------------------------
+
 def delete_prediction(prediction_id: int):
     conn = get_connection()
 
@@ -101,6 +107,7 @@ def delete_prediction(prediction_id: int):
 # -------------------------------------------------
 # Clear entire prediction history
 # -------------------------------------------------
+
 def clear_history():
     conn = get_connection()
 
@@ -108,6 +115,8 @@ def clear_history():
 
     conn.commit()
     conn.close()
+
+
 # -------------------------------------------------
 # Dashboard Statistics
 # -------------------------------------------------
@@ -115,38 +124,57 @@ def clear_history():
 def get_dashboard_stats():
     conn = get_connection()
 
-    total_predictions = conn.execute("""
-        SELECT COUNT(*) FROM predictions
-    """).fetchone()[0]
-
-    high_risk = conn.execute("""
+    total_predictions = conn.execute(
+        """
         SELECT COUNT(*)
         FROM predictions
-        WHERE probability_default >= 0.70
-    """).fetchone()[0]
+        """
+    ).fetchone()[0]
 
-    medium_risk = conn.execute("""
+    high_risk = conn.execute(
+        """
         SELECT COUNT(*)
         FROM predictions
-        WHERE probability_default >= 0.40
-          AND probability_default < 0.70
-    """).fetchone()[0]
+        WHERE probability_default >= ?
+        """,
+        (HIGH_RISK_THRESHOLD,),
+    ).fetchone()[0]
 
-    low_risk = conn.execute("""
+    medium_risk = conn.execute(
+        """
         SELECT COUNT(*)
         FROM predictions
-        WHERE probability_default < 0.40
-    """).fetchone()[0]
+        WHERE probability_default >= ?
+          AND probability_default < ?
+        """,
+        (
+            MEDIUM_RISK_THRESHOLD,
+            HIGH_RISK_THRESHOLD,
+        ),
+    ).fetchone()[0]
 
-    average_probability = conn.execute("""
+    low_risk = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM predictions
+        WHERE probability_default < ?
+        """,
+        (MEDIUM_RISK_THRESHOLD,),
+    ).fetchone()[0]
+
+    average_probability = conn.execute(
+        """
         SELECT AVG(probability_default)
         FROM predictions
-    """).fetchone()[0]
+        """
+    ).fetchone()[0]
 
-    average_limit = conn.execute("""
+    average_limit = conn.execute(
+        """
         SELECT AVG(limit_bal)
         FROM predictions
-    """).fetchone()[0]
+        """
+    ).fetchone()[0]
 
     conn.close()
 
@@ -155,8 +183,14 @@ def get_dashboard_stats():
         "high_risk": high_risk,
         "medium_risk": medium_risk,
         "low_risk": low_risk,
-        "average_probability": round((average_probability or 0) * 100, 2),
-        "average_limit": round(average_limit or 0, 2),
+        "average_probability": round(
+            (average_probability or 0) * 100,
+            2,
+        ),
+        "average_limit": round(
+            average_limit or 0,
+            2,
+        ),
     }
 
 
@@ -167,17 +201,23 @@ def get_dashboard_stats():
 def get_risk_distribution():
     conn = get_connection()
 
-    rows = conn.execute("""
+    rows = conn.execute(
+        """
         SELECT
             CASE
-                WHEN probability_default >= 0.70 THEN 'High'
-                WHEN probability_default >= 0.40 THEN 'Medium'
+                WHEN probability_default >= ? THEN 'High'
+                WHEN probability_default >= ? THEN 'Medium'
                 ELSE 'Low'
             END AS risk,
             COUNT(*) AS count
         FROM predictions
         GROUP BY risk
-    """).fetchall()
+        """,
+        (
+            HIGH_RISK_THRESHOLD,
+            MEDIUM_RISK_THRESHOLD,
+        ),
+    ).fetchall()
 
     conn.close()
 
@@ -191,12 +231,15 @@ def get_risk_distribution():
 def get_recent_predictions(limit=10):
     conn = get_connection()
 
-    rows = conn.execute("""
+    rows = conn.execute(
+        """
         SELECT *
         FROM predictions
         ORDER BY timestamp DESC
         LIMIT ?
-    """, (limit,)).fetchall()
+        """,
+        (limit,),
+    ).fetchall()
 
     conn.close()
 

@@ -14,44 +14,45 @@ export default function AnalyticsKPIs({ history = [] }) {
     const total = history.length;
 
     const high = history.filter(
-        item => item.probability_default >= 0.7
+        item => Number(item.probability_default || 0) >= 70
     ).length;
 
     const medium = history.filter(
-        item =>
-            item.probability_default >= 0.4 &&
-            item.probability_default < 0.7
+        item => {
+            const probability = Number(item.probability_default || 0);
+            return probability >= 40 && probability < 70;
+        }
     ).length;
 
     const low = history.filter(
-        item => item.probability_default < 0.4
+        item => Number(item.probability_default || 0) < 40
     ).length;
 
     const average =
         total === 0
-            ? 0
+            ? "0.0"
             : (
                 history.reduce(
-                    (sum, item) => sum + item.probability_default,
+                    (sum, item) => sum + Number(item.probability_default || 0),
                     0
-                ) / total * 100
+                ) / total
             ).toFixed(1);
 
     const highest =
         total === 0
-            ? 0
+            ? "0.0"
             : Math.max(
                 ...history.map(
-                    item => item.probability_default * 100
+                    item => Number(item.probability_default || 0)
                 )
             ).toFixed(1);
 
     const lowest =
         total === 0
-            ? 0
+            ? "0.0"
             : Math.min(
                 ...history.map(
-                    item => item.probability_default * 100
+                    item => Number(item.probability_default || 0)
                 )
             ).toFixed(1);
 

@@ -6,37 +6,32 @@ import {
   Target,
 } from "lucide-react";
 
-export default function AnalyticsCards({ results }) {
-  if (!results || results.length === 0) return null;
+export default function AnalyticsCards({ results = [] }) {
+  if (results.length === 0) return null;
 
   const avgProbability =
-    (
-      results.reduce(
-        (sum, r) => sum + r.probability_default,
-        0
-      ) / results.length
-    ) * 100;
-
-  const avgLimit =
     results.reduce(
-      (sum, r) => sum + r.LIMIT_BAL,
+      (sum, r) => sum + Number(r.probability_default || 0),
       0
     ) / results.length;
 
-  const highestRisk =
-    Math.max(
-      ...results.map((r) => r.probability_default)
-    ) * 100;
+  const avgLimit =
+    results.reduce(
+      (sum, r) => sum + Number(r.LIMIT_BAL || 0),
+      0
+    ) / results.length;
 
-  const lowestRisk =
-    Math.min(
-      ...results.map((r) => r.probability_default)
-    ) * 100;
+  const highestRisk = Math.max(
+    ...results.map((r) => Number(r.probability_default || 0))
+  );
 
-  const predictedDefaults =
-    results.filter(
-      (r) => r.prediction === 1
-    ).length;
+  const lowestRisk = Math.min(
+    ...results.map((r) => Number(r.probability_default || 0))
+  );
+
+  const predictedDefaults = results.filter(
+    (r) => r.prediction === 1
+  ).length;
 
   const analytics = [
     {
@@ -92,7 +87,6 @@ export default function AnalyticsCards({ results }) {
             className={`${item.bg} rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-6`}
           >
             <div className="flex justify-between items-center">
-
               <div>
                 <p className="text-sm text-gray-500">
                   {item.title}
@@ -103,15 +97,12 @@ export default function AnalyticsCards({ results }) {
                 </h2>
               </div>
 
-              <div
-                className={`${item.iconBg} p-4 rounded-2xl`}
-              >
+              <div className={`${item.iconBg} p-4 rounded-2xl`}>
                 <Icon
                   size={32}
                   className={item.color}
                 />
               </div>
-
             </div>
           </div>
         );

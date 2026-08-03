@@ -33,7 +33,7 @@ export default function RecentPredictions({ data = [] }) {
               {data.map((item) => {
 
                 const probability =
-                  item.probability_default * 100;
+                  Number(item.probability_default || 0);
 
                 let risk = "Low";
                 let color =

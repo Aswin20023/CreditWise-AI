@@ -1,64 +1,49 @@
-import pandas as pd
-from fastapi import APIRouter
+import logging
 
-from app.schemas import CustomerData, ExplainResponse
-from app.predictor import model, predict_customer
-from src.explainability.shap_analysis import SHAPExplainer
+from fastapi import APIRouter, HTTPException
+
+from app.schemas import (
+    CustomerData,
+    ExplainResponse,
+)
+from app.predictor import predict_customer
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
-    tags=["Explainability"]
+    tags=["Explainability"],
 )
-
-# Create the SHAP explainer once when the API starts
-explainer = SHAPExplainer(model)
 
 
 @router.post(
     "/explain",
     response_model=ExplainResponse,
-    summary="Explain Prediction"
+    summary="Explain Prediction",
 )
 def explain(data: CustomerData):
+    """
+    Generate a prediction together with its SHAP explanation.
+    """
 
-    # Convert request to dictionary
-    customer = data.dict()
+    try:
+        customer = data.dict()
 
-    # Get prediction from existing prediction logic
-    prediction = predict_customer(customer.copy())
+        # predict_customer() already:
+        # - performs feature engineering
+        # - generates SHAP values
+        # - creates the AI summary
+        # - returns top_features
+        return predict_customer(customer)
 
-    # Feature Engineering (must match predictor.py)
-    bill_cols = [
-        "BILL_AMT1",
-        "BILL_AMT2",
-        "BILL_AMT3",
-        "BILL_AMT4",
-        "BILL_AMT5",
-        "BILL_AMT6",
-    ]
+    except HTTPException:
+        raise
 
-    payment_cols = [
-        "PAY_AMT1",
-        "PAY_AMT2",
-        "PAY_AMT3",
-        "PAY_AMT4",
-        "PAY_AMT5",
-        "PAY_AMT6",
-    ]
+    except Exception:
+        logger.exception(
+            "Unexpected error while generating explanation."
+        )
 
-    customer["avg_bill_amount"] = (
-        sum(customer[col] for col in bill_cols) / len(bill_cols)
-    )
-
-    customer["avg_payment_amount"] = (
-        sum(customer[col] for col in payment_cols) / len(payment_cols)
-    )
-
-    input_df = pd.DataFrame([customer])
-
-    # Generate SHAP explanation
-    top_features = explainer.explain(input_df)
-
-    return {
-        **prediction,
-        "top_features": top_features,
-    }
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to generate the prediction explanation.",
+        )

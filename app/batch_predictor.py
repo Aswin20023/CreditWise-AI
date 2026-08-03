@@ -1,62 +1,56 @@
 import pandas as pd
 
-from src.models.predict import predict_default
 from app.predictor import model
+from app.risk_config import get_risk
+from src.models.predict import predict_default
+from src.preprocessing.feature_engineering import (
+    add_engineered_features,
+)
 
 
-def predict_batch(df: pd.DataFrame):
+def predict_batch(df: pd.DataFrame) -> pd.DataFrame:
     """
     Predict credit default risk for multiple customers.
-    Returns probabilities as percentages while calculating
-    risk using the original probability values.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Customer records.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Original data with prediction results.
     """
 
-    bill_cols = [
-        "BILL_AMT1",
-        "BILL_AMT2",
-        "BILL_AMT3",
-        "BILL_AMT4",
-        "BILL_AMT5",
-        "BILL_AMT6",
-    ]
-
-    payment_cols = [
-        "PAY_AMT1",
-        "PAY_AMT2",
-        "PAY_AMT3",
-        "PAY_AMT4",
-        "PAY_AMT5",
-        "PAY_AMT6",
-    ]
-
-    result = df.copy()
-
     # Feature Engineering
-    result["avg_bill_amount"] = result[bill_cols].mean(axis=1)
-    result["avg_payment_amount"] = result[payment_cols].mean(axis=1)
+    result = add_engineered_features(df)
 
     # Prediction
-    predictions, probabilities = predict_default(model, result)
+    predictions, probabilities = predict_default(
+        model,
+        result,
+    )
 
     result["prediction"] = predictions
 
-    # Keep original probabilities (0-1) for risk calculation
     probability_default = probabilities[:, 1]
 
-    # Risk Classification
-    result["risk"] = pd.Series(probability_default).apply(
-        lambda x: (
-            "High"
-            if x >= 0.70
-            else "Medium"
-            if x >= 0.40
-            else "Low"
-        )
+    result["risk"] = [
+        get_risk(probability)
+        for probability in probability_default
+    ]
+
+    result["probability_default"] = (
+        pd.Series(probability_default)
+        .mul(100)
+        .round(2)
     )
 
-    # Return probability as percentage (0-100)
-    result["probability_default"] = (
-        pd.Series(probability_default) * 100
-    ).round(2)
+    result["probability_no_default"] = (
+        pd.Series(probabilities[:, 0])
+        .mul(100)
+        .round(2)
+    )
 
     return result

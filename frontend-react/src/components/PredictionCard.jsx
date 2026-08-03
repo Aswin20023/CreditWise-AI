@@ -27,8 +27,8 @@ const PredictionCard = ({
 
   if (!prediction) return null;
 
-  const probability = Math.round(
-    (prediction.probability_default || 0) * 100
+  const probability = Number(
+  (prediction.probability_default || 0).toFixed(2)
   );
 
   const confidence = Math.max(
@@ -147,7 +147,7 @@ const PredictionCard = ({
 
           {/* Probability */}
 
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">             
 
             <div className="flex items-center gap-2">
 

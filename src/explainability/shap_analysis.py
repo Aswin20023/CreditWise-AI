@@ -1,23 +1,30 @@
-import shap
+import numpy as np
 import pandas as pd
+import shap
 
 
 class SHAPExplainer:
     """
     Generates SHAP explanations for tree-based models.
+
+    Compatible with both older and newer SHAP versions.
     """
 
     def __init__(self, model):
         self.model = model
         self.explainer = shap.TreeExplainer(model)
 
-    def explain(self, input_df: pd.DataFrame, top_n: int = 5):
+    def explain(
+        self,
+        input_df: pd.DataFrame,
+        top_n: int = 5,
+    ):
         """
         Explain a single prediction.
 
         Parameters
         ----------
-        input_df : pd.DataFrame
+        input_df : pandas.DataFrame
             Customer features.
 
         top_n : int
@@ -28,14 +35,34 @@ class SHAPExplainer:
         List[dict]
         """
 
-        # SHAP values
-        shap_values = self.explainer.shap_values(input_df)
+        shap_output = self.explainer(input_df)
 
-        # Random Forest binary classifier
-        if isinstance(shap_values, list):
-            values = shap_values[1][0]
+        # -------------------------------
+        # SHAP >= 0.45 (Explanation object)
+        # -------------------------------
+        if hasattr(shap_output, "values"):
+
+            values = shap_output.values
+
+            if values.ndim == 3:
+                # Binary / multiclass classifier
+                values = values[0, :, 1]
+            elif values.ndim == 2:
+                values = values[0]
+            else:
+                values = np.ravel(values)
+
+        # -------------------------------
+        # Older SHAP versions
+        # -------------------------------
         else:
-            values = shap_values[0]
+
+            values = self.explainer.shap_values(input_df)
+
+            if isinstance(values, list):
+                values = values[1][0]
+            else:
+                values = values[0]
 
         feature_names = input_df.columns.tolist()
 
@@ -57,7 +84,7 @@ class SHAPExplainer:
             )
 
         explanation.sort(
-            key=lambda x: abs(x["impact"]),
+            key=lambda item: abs(item["impact"]),
             reverse=True,
         )
 

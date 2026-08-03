@@ -1,11 +1,25 @@
+from app.risk_config import get_prediction
+
+
 def predict_default(model, input_data):
-    predictions = model.predict(input_data)
+    """
+    Predict default probability using the trained model.
+
+    Returns
+    -------
+    predictions : list[int]
+        1 = Default
+        0 = Safe
+
+    probabilities : ndarray
+        Output from model.predict_proba().
+    """
+
     probabilities = model.predict_proba(input_data)
 
-    print("=" * 60)
-    print("PREDICT_PROBA OUTPUT")
-    print(probabilities[:5])
-    print("Shape:", probabilities.shape)
-    print("=" * 60)
+    predictions = [
+        get_prediction(probability[1])
+        for probability in probabilities
+    ]
 
     return predictions, probabilities

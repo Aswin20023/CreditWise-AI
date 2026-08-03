@@ -14,7 +14,9 @@ export default function RiskTrendChart({ history = [] }) {
         .sort((a, b) => a.id - b.id)
         .map(item => ({
             id: item.id,
-            risk: Number((item.probability_default * 100).toFixed(2)),
+            risk: Number(
+                Number(item.probability_default || 0).toFixed(2)
+            ),
         }));
 
     return (
@@ -52,16 +54,16 @@ export default function RiskTrendChart({ history = [] }) {
                         }}
                     />
 
-                    <Tooltip />
+                    <Tooltip
+                        formatter={(value) => [`${value}%`, "Risk"]}
+                    />
 
                     <Line
                         type="monotone"
                         dataKey="risk"
                         stroke="#2563eb"
                         strokeWidth={3}
-                        dot={{
-                            r: 5,
-                        }}
+                        dot={{ r: 5 }}
                     />
 
                 </LineChart>

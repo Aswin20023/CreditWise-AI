@@ -47,9 +47,9 @@ export default function exportBatchPDF(results = []) {
 
   const rows = results.map((row, index) => [
     index + 1,
-    row.LIMIT_BAL.toLocaleString(),
+    Number(row.LIMIT_BAL).toLocaleString("en-IN"),
     row.AGE,
-    `${(row.probability_default * 100).toFixed(2)}%`,
+    `${Number(row.probability_default || 0).toFixed(2)}%`,
     row.prediction === 1 ? "Default" : "Safe",
     row.risk,
   ]);

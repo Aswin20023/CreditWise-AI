@@ -36,7 +36,7 @@ export function generatePDF(customer, prediction) {
     theme: "grid",
     head: [["Field", "Value"]],
     body: [
-      ["Credit Limit", customer.LIMIT_BAL],
+      ["Credit Limit", `₹${Number(customer.LIMIT_BAL).toLocaleString("en-IN")}`],
       ["Age", customer.AGE],
       ["Education", customer.EDUCATION],
       ["Marriage", customer.MARRIAGE],
@@ -64,11 +64,11 @@ export function generatePDF(customer, prediction) {
       ],
       [
         "Default Probability",
-        `${(prediction.probability_default * 100).toFixed(2)} %`,
+        `${Number(prediction.probability_default || 0).toFixed(2)} %`,
       ],
       [
         "No Default Probability",
-        `${(prediction.probability_no_default * 100).toFixed(2)} %`,
+        `${Number(prediction.probability_no_default || 0).toFixed(2)} %`,
       ],
     ],
   });
@@ -85,7 +85,8 @@ export function generatePDF(customer, prediction) {
   doc.setFontSize(11);
 
   doc.text(
-    prediction.summary,
+    prediction.summary ||
+      "No AI summary available.",
     14,
     summaryY + 8,
     {
@@ -102,13 +103,18 @@ export function generatePDF(customer, prediction) {
   doc.setFontSize(16);
   doc.text("Top Contributing Features", 14, featureY);
 
+  const features =
+    prediction.top_features?.length > 0
+      ? prediction.top_features.map((item) => [
+          item.feature,
+          item.impact,
+        ])
+      : [["Not Available", "-"]];
+
   autoTable(doc, {
     startY: featureY + 6,
     head: [["Feature", "Impact"]],
-    body: prediction.top_features.map((item) => [
-      item.feature,
-      item.impact,
-    ]),
+    body: features,
   });
 
   // ===========================
@@ -144,7 +150,6 @@ export function generatePDF(customer, prediction) {
   // ===========================
 
   doc.setDrawColor(180);
-
   doc.line(14, 285, 196, 285);
 
   doc.setFontSize(9);

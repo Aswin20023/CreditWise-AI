@@ -29,9 +29,7 @@ export default function HistoryTable({ refresh }) {
   async function fetchHistory() {
     try {
       setLoading(true);
-
       const response = await api.get("/history");
-
       setHistory(response.data);
     } catch (err) {
       console.error("History Error:", err);
@@ -61,7 +59,7 @@ export default function HistoryTable({ refresh }) {
         "Age",
         "Education",
         "Prediction",
-        "Probability",
+        "Probability (%)",
       ],
       ...filtered.map((i) => [
         i.id,
@@ -70,7 +68,7 @@ export default function HistoryTable({ refresh }) {
         i.age,
         i.education,
         i.prediction,
-        (i.probability_default * 100).toFixed(2),
+        Number(i.probability_default).toFixed(2),
       ]),
     ]
       .map((r) => r.join(","))
@@ -83,7 +81,6 @@ export default function HistoryTable({ refresh }) {
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement("a");
-
     a.href = url;
     a.download = "prediction_history.csv";
     a.click();
@@ -125,7 +122,9 @@ export default function HistoryTable({ refresh }) {
 
   return (
     <>
-      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-5 mb-6">
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6">
+
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-5 mb-6">
 
           <div>
             <h2 className="text-2xl font-bold text-slate-800">
@@ -226,8 +225,11 @@ export default function HistoryTable({ refresh }) {
 
               </thead>
 
-              <tbody>                {filtered.map((item) => {
-                  const probability = item.probability_default * 100;
+              <tbody>
+
+                {filtered.map((item) => {
+
+                  const probability = Number(item.probability_default);
 
                   let risk = "Low";
                   let badge = "bg-green-100 text-green-700";
@@ -337,9 +339,12 @@ export default function HistoryTable({ refresh }) {
 
                         </div>
                       </td>
+
                     </tr>
                   );
-                })}              </tbody>
+                })}
+
+              </tbody>
 
             </table>
 
