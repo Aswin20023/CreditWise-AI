@@ -31,10 +31,10 @@ export default function useExplain() {
     }
   }, []);
 
-  const clearExplanation = () => {
+  const clearExplanation = useCallback(() => {
     setExplanation(null);
     setError(null);
-  };
+  }, []);
 
   return {
     loading,

@@ -8,12 +8,12 @@ import ActionButtons from "./ActionButtons";
 
 import useExplain from "../../hooks/useExplain";
 
-const ExplainModal = ({
+export default function ExplainModal({
   isOpen,
   onClose,
   prediction,
   customerData,
-}) => {
+}) {
   const {
     loading,
     explanation,
@@ -30,9 +30,16 @@ const ExplainModal = ({
     return () => {
       clearExplanation();
     };
-  }, [isOpen, customerData, getExplanation]);
+  }, [
+    isOpen,
+    customerData,
+    getExplanation,
+    clearExplanation,
+  ]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   // If backend succeeds use explanation,
   // otherwise fall back to prediction.
@@ -63,24 +70,12 @@ const ExplainModal = ({
           )}
 
           {!loading && error && (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-6">
-
-              <h3 className="text-xl font-semibold text-red-700">
-                Backend explanation unavailable
-              </h3>
-
-              <p className="mt-2 text-red-600">
-                {error}
-              </p>
-
-              <p className="mt-4 text-sm text-slate-600">
-                Showing prediction summary instead.
-              </p>
-
+            <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-red-700">
+              {error}
             </div>
           )}
 
-          {!loading && data && (
+          {!loading && !error && data && (
             <div className="space-y-8">
 
               <RiskSummary prediction={data} />
@@ -95,6 +90,7 @@ const ExplainModal = ({
 
               <ActionButtons
                 prediction={data}
+                customerData={customerData}
               />
 
             </div>
@@ -106,6 +102,4 @@ const ExplainModal = ({
 
     </div>
   );
-};
-
-export default ExplainModal;
+}
