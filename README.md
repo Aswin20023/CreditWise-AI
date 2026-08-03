@@ -2,41 +2,90 @@
 
 <p align="center">
 
-### AI-Powered Alternative Credit Scoring System
+# AI-Powered Credit Risk Intelligence Platform
 
-Predict customer credit risk using Machine Learning with interactive analytics, explainable insights, and batch portfolio analysis.
+Predict customer credit default risk using Machine Learning, explain predictions with SHAP, and analyze entire customer portfolios through an interactive analytics dashboard.
 
 </p>
 
 ---
 
-# Overview
+## Overview
 
-CreditWise AI is an end-to-end Machine Learning application that predicts customer credit default risk using a Random Forest model.
+CreditWise AI is an end-to-end machine learning application that predicts the probability of customer credit default using a Random Forest classifier.
 
-The system provides both single customer prediction and batch portfolio analysis through an interactive React dashboard powered by a FastAPI backend.
+The platform combines predictive analytics, explainable AI, portfolio-level risk assessment, and interactive visualizations to help financial institutions evaluate customer creditworthiness.
 
----
-
-# Features
-
-- Individual Credit Risk Prediction
-- Batch CSV Prediction
-- Credit Default Probability
-- High / Medium / Low Risk Classification
-- Interactive Analytics Dashboard
-- Portfolio Risk Distribution
-- Search & Filtering
-- Sorting
-- Pagination
-- Export CSV
-- Export PDF Report
-- FastAPI REST API
-- Responsive React UI
+The application consists of a React frontend, FastAPI backend, and Scikit-learn machine learning pipeline.
 
 ---
 
-# Tech Stack
+# Key Features
+
+### Credit Risk Prediction
+
+- Individual customer prediction
+- Default probability estimation
+- Risk categorization (Low / Medium / High)
+
+---
+
+### Batch Portfolio Analysis
+
+- Upload CSV files
+- Analyze thousands of customers
+- Portfolio-level risk distribution
+- Export results
+
+---
+
+### Explainable AI
+
+- SHAP feature importance
+- AI-generated prediction explanation
+- Feature contribution visualization
+
+---
+
+### Analytics Dashboard
+
+- Risk distribution
+- Average probability
+- Highest risk customer
+- Lowest risk customer
+- Predicted defaults
+- Customer portfolio overview
+
+---
+
+### Reporting
+
+- Export prediction results to CSV
+- Export professional PDF reports
+
+---
+
+# System Architecture
+
+```
+                React + Vite
+                     │
+          REST API (Axios)
+                     │
+          FastAPI Backend
+                     │
+      Feature Engineering
+                     │
+     Random Forest Classifier
+                     │
+          SHAP Explainability
+                     │
+      Prediction + Analytics
+```
+
+---
+
+# Technology Stack
 
 ## Frontend
 
@@ -45,52 +94,96 @@ The system provides both single customer prediction and batch portfolio analysis
 - Tailwind CSS
 - Axios
 - Recharts
+- html2canvas
+- jsPDF
+
+---
 
 ## Backend
 
 - FastAPI
 - Python
-- SQLite
 - Pandas
 - NumPy
+- SQLite
+
+---
 
 ## Machine Learning
 
-- Random Forest Classifier
 - Scikit-learn
-- SHAP (Explainability)
+- Random Forest Classifier
+- SHAP
+- Joblib
+
+---
+
+# Machine Learning Pipeline
+
+```
+Customer Data
+      │
+      ▼
+Feature Engineering
+      │
+      ▼
+Random Forest Model
+      │
+      ▼
+Prediction Probability
+      │
+      ├────────► Risk Classification
+      │
+      └────────► SHAP Explainability
+```
+
+---
+
+# Risk Classification
+
+| Probability | Risk |
+|------------:|------|
+| < 40% | Low |
+| 40% – 69.99% | Medium |
+| ≥ 70% | High |
 
 ---
 
 # Screenshots
 
-## Hero Section
+## Landing Page
 
-![Hero](screenshot/hero.png)
-
----
-
-## Analytics Dashboard
-
-![Dashboard](screenshot/dashboard.png)
+![Hero](screenshots/hero.png)
 
 ---
 
-## Risk Distribution
+## Customer Prediction
 
-![Analytics](screenshot/analytics.png)
+![Prediction](screenshots/prediction.png)
+
+---
+
+## Explainable AI
+
+![Explainability](screenshots/explainability.png)
 
 ---
 
 ## Batch Prediction
 
-![Batch](screenshot/batch-results.png)
+![Batch](screenshots/batch-results.png)
 
 ---
 
-## Portfolio Summary
+## Analytics Dashboard
 
-![Portfolio](screenshot/portfolio.png)
+![Dashboard](screenshots/dashboard.png)
+
+---
+
+## Portfolio Analytics
+
+![Portfolio](screenshots/portfolio.png)
 
 ---
 
@@ -99,13 +192,13 @@ The system provides both single customer prediction and batch portfolio analysis
 ```text
 CreditWise-AI
 │
-├── app
-├── frontend-react
-├── data
-├── models
-├── notebooks
-├── reports
-├── src
+├── app/                  # FastAPI backend
+├── frontend-react/       # React frontend
+├── models/               # Trained ML models
+├── notebooks/            # Model development
+├── src/                  # ML pipeline
+├── data/                 # Datasets
+├── reports/              # Generated reports
 └── README.md
 ```
 
@@ -117,66 +210,96 @@ CreditWise-AI
 
 ```bash
 git clone https://github.com/Aswin20023/CreditWise-AI.git
+
+cd CreditWise-AI
 ```
+
+---
 
 ## Backend
 
 ```bash
 pip install -r requirements.txt
+
 uvicorn app.main:app --reload
 ```
+
+Backend URL
+
+```
+http://localhost:8000
+```
+
+Swagger
+
+```
+http://localhost:8000/docs
+```
+
+---
 
 ## Frontend
 
 ```bash
 cd frontend-react
+
 npm install
+
 npm run dev
+```
+
+Frontend URL
+
+```
+http://localhost:5173
 ```
 
 ---
 
 # API Endpoints
 
-### Predict Customer
-
-```
-POST /predict
-```
-
-### Batch Prediction
-
-```
-POST /predict-batch
-```
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| POST | `/predict` | Single customer prediction |
+| POST | `/batch/predict` | Batch CSV prediction |
+| POST | `/explain` | SHAP explainability |
+| GET | `/dashboard` | Dashboard analytics |
+| GET | `/history` | Prediction history |
+| GET | `/health` | API health |
 
 ---
 
 # Project Highlights
 
-- AI-powered credit risk prediction
-- Business-ready analytics dashboard
-- Probability-based risk scoring
-- Portfolio analysis
-- Exportable reports
-- Production-ready REST API
+- End-to-end Machine Learning system
+- Explainable AI using SHAP
+- Interactive analytics dashboard
+- Portfolio-level risk assessment
+- Batch prediction using CSV
+- Professional PDF reporting
+- RESTful FastAPI backend
+- Modern React frontend
+- Responsive UI
+- Production-ready architecture
 
 ---
 
 # Future Improvements
 
-- User Authentication
-- Model Monitoring
-- Cloud Deployment
-- Docker Support
-- PostgreSQL
-- Explainable AI Dashboard
+- User authentication
+- PostgreSQL support
+- Docker deployment
+- CI/CD pipeline
+- Automated model retraining
+- Cloud storage integration
+- Model monitoring
+- Multi-model comparison
 
 ---
 
 # Author
 
-### Aswin A Manchakkal
+## Aswin A Manchakkal
 
 GitHub
 
@@ -186,4 +309,4 @@ https://github.com/Aswin20023
 
 # License
 
-This project is developed for educational and portfolio purposes.
+This project is intended for educational, research, and portfolio purposes.
